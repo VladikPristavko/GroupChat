@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online group chat</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="/js/onlinechat.js"></script>
+</head>
+<body>
+    <section class="lists">
+        <div class="messages-list"></div>
+        <div class="users-list"></div>
+    </section>
+
+    <label class="user-label" for="new"></label><br>
+    <section class="controls">
+        <textarea class="new-message" id="new"></textarea>
+        <button class="send-message">Send</button>
+        <button class="exit-chat">Exit</button>
+    </section>
+
+    <section class="login">
+        <label for="name">Login:</label><br>
+        <textarea class="log" id="name" rows="1"></textarea><br>
+        <label for="pass">Password:</label><br>
+        <textarea class="pass" id="pass" rows="1"></textarea><br>
+        <button class="enter">GO</button>
+        <button class="exit">Exit</button>
+    </section>
+</body>
+</html>
