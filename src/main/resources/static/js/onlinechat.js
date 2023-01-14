@@ -31,7 +31,7 @@ $(function(){
                     case 'ok' :
                         $('.new-message').val('');
                         break;
-                };
+                }
             });
             $('.new-message').focus();
         });
@@ -39,32 +39,27 @@ $(function(){
         $('.exit-chat').on('click', function(){
             //POST request set SessionId to "empty"
             $.post('/exit', {name : name}, function(response){
-                if(response.result == 'ok'){
-                    //hide all windows
-                    $('.lists').css({display: 'none'});
-                    $('.controls').css({display: 'none'});
-                    $('.user-label').css({display: 'none'});
-                    //stop GET requests for Messages and Users
-                    clearInterval(interval);
-                    //call registration window
-                    init();
+                if(response.result === 'ok'){
+                    location.reload();
                 }
-                if(response.result == 'noUser'){
+                if(response.result === 'noUser'){
                     alert('Username out of database!')
                 }
             });
         });
         //each 1 sec update messages and users
-        let interval = setInterval(function(){
+        setInterval(function(){
             updateMessages(lastMessageTime);
             updateUsers();
             }, 1000
         );
     };
     //enter or register user
-    $.get('/init', {}, function(response){
+    $.get('/auth', {}, function(response){
+        $('.log').val('');
+        $('.pass').val('');
         if(response.result === 'new'){
-            init();
+            register();
             return;
         }
         if(response.result === 'ok'){
@@ -73,7 +68,7 @@ $(function(){
         }
     });
     let registerUser = function(name, pwd){
-        $.post('/auth', {name : name, password : pwd}, function(response){
+        $.post('/reg', {name : name, password : pwd}, function(response){
             switch(response.result){
                 case 'wrongPWD' :
                     alert('User already defined! Wrong password!');
@@ -85,11 +80,11 @@ $(function(){
                     enterChatTime = response.enter;
                     initApplication(response.name);
                     break;
-            };
+            }
         });
     };
     //input form handler
-    let init = function(){
+    let register = function(){
         $('.login').css({display: 'inline-block'});
         $('.enter').on('click', function(){
             let name = $('.log').val();
@@ -112,7 +107,7 @@ $(function(){
     };
     let updateMessages = function(time){
         $.get('/message', {time : time}, function(response){
-            if(response.length == 0){
+            if(response.length === 0){
                 return;
             }
             lastMessageTime = response[response.length - 1].datetime;
@@ -128,7 +123,7 @@ $(function(){
         let messageItems = document.querySelectorAll('.message-item');
             if (!messageItems){
                 return;
-            };
+            }
         messageItems[messageItems.length - 1].scrollIntoView({
             behavior: scrollBehavior || 'auto',
             block: 'end',
@@ -137,14 +132,14 @@ $(function(){
     //get and update users
     let updateUsers = function(){
         $.get('/users-count', {}, function(response){
-            if(usersCount != response){
+            if(usersCount !== response){
                 loadUsers();
-            };
+            }
         });
     };
     let loadUsers = function(){
         $.get('/users', {}, function(response){
-            if(response.length == 0){
+            if(response.length === 0){
                 return;
             }
             usersCount = response.length;
